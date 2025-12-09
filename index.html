@@ -38,97 +38,70 @@
         padding: 0.5em;
       }
     }
+    .calculator {
+      background: #f9f9f9;
+      padding: 1em;
+      border: 1px solid #ccc;
+      margin-top: 2em;
+    }
+    .calculator label {
+      display: block;
+      margin-top: 1em;
+    }
+    .result {
+      background: #fff;
+      padding: 0.5em;
+      border: 1px solid #aaa;
+      margin-top: 1em;
+    }
   </style>
 </head>
 <body>
   <h1>次の進路に向けて</h1>
   <p>このページでは、宮城県内および全国に対応した、通信制・単位制・定時制高校についての特徴をまとめたものです。個人によって製作されたものであるため、あくまで参考程度に閲覧いただき、詳細についてはご自身でお調べいただくことを推奨いたします。</p>
 
-  <h2>通信制・単位制・定時制高校の違い</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>比較項目</th>
-        <th>通信制高校</th>
-        <th>単位制高校</th>
-        <th>定時制高校</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>学習環境</td>
-        <td>自宅中心<br>（オンライン・郵送）</td>
-        <td>学校中心<br>（時間割は自由）</td>
-        <td>学校<br>（昼・夜間の選択制）</td>
-      </tr>
-      <tr>
-        <td>卒業要件</td>
-        <td>レポート提出＋スクーリング＋試験</td>
-        <td>必要単位を修得</td>
-        <td>授業出席＋単位取得</td>
-      </tr>
-      <tr>
-        <td>登校について</td>
-        <td>年数回〜月1回など<br>柔軟</td>
-        <td>科目に応じて<br>週1〜5日</td>
-        <td>毎日<br>（夕方・夜間中心）</td>
-      </tr>
-    </tbody>
-  </table>
+  <h2>進路変更にかかる費用の自動計算</h2>
+  <div class="calculator">
+    <label for="grade">現在の学年:</label>
+    <select id="grade">
+      <option value="1">高校1年生</option>
+      <option value="2">高校2年生</option>
+      <option value="3">高校3年生</option>
+    </select>
 
-  <h2>おすすめ高校リスト（ハイパーリンク付き）</h2>
-  <ul>
-    <li><a href="https://mitazono.myswan.ed.jp/" target="_blank">宮城県美田園高等学校（通信制課程）</a></li>
-    <li><a href="https://www.sendaiikuei.ed.jp/ilc/" target="_blank">仙台育英学園高等学校 ILC</a></li>
-    <li><a href="https://www.daiichigakuin.ed.jp/" target="_blank">第一学院高等学校</a></li>
-    <li><a href="https://www.clark.ed.jp/" target="_blank">クラーク記念国際高等学校</a></li>
-    <li><a href="https://www.nnn.ed.nico/" target="_blank">N高等学校・S高等学校（KADOKAWA）</a></li>
-    <li><a href="https://www.nhk-g.ac.jp/" target="_blank">NHK学園高等学校</a></li>
-    <li><a href="https://www.hchs.ed.jp/" target="_blank">ヒューマンキャンパス高等学校</a></li>
-  </ul>
+    <label for="credits">取得済み単位数:</label>
+    <input type="number" id="credits" min="0" max="74" value="0">
 
-  <h2>学費比較（12月転入・就学支援金適用後）</h2>
-  <p>高校1～3年次の12月に全日制から転入・編入した場合を想定。就学支援金が適用された上でのモデルです。</p>
-  <table>
-    <thead>
-      <tr>
-        <th>進路変更時期</th>
-        <th>公立通信制<br>（例：仙台二華高校通信）</th>
-        <th>私立通信制<br>（例：第一学院/N高）</th>
-        <th>公立定時制</th>
-        <th>単位制高校<br>（美田園高校）</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>高1転入</td>
-        <td>入学金：500円<br>授業料：0円（実質）<br>総額：500円</td>
-        <td>入学金：約30,000円<br>授業料：約384,000円（74単位×5,200円）<br>総額：約414,000円</td>
-        <td>入学金：2,100円<br>授業料：0円（実質）<br>総額：2,100円</td>
-        <td>入学金：500円<br>授業料：820円×74単位＋諸費<br>総額：約90,000円</td>
-      </tr>
-      <tr>
-        <td>高2転入</td>
-        <td>入学金：500円<br>授業料：0円（実質）<br>総額：500円</td>
-        <td>入学金：約30,000円<br>授業料：約228,800円（44単位×5,200円）<br>総額：約258,000円</td>
-        <td>入学金：2,100円<br>授業料：0円（実質）<br>総額：2,100円</td>
-        <td>入学金：500円<br>授業料：820円×44単位＋諸費<br>総額：約60,000円</td>
-      </tr>
-      <tr>
-        <td>高3転入</td>
-        <td>入学金：500円<br>授業料：0円（実質）<br>総額：500円</td>
-        <td>入学金：約30,000円<br>授業料：約72,800円（14単位×5,200円）<br>総額：約103,000円</td>
-        <td>入学金：2,100円<br>授業料：0円（実質）<br>総額：2,100円</td>
-        <td>入学金：500円<br>授業料：820円×14単位＋諸費<br>総額：約30,000円</td>
-      </tr>
-    </tbody>
-  </table>
+    <button onclick="calculateCost()">費用を計算する</button>
 
-  <p>※私立通信制の授業料は就学支援金適用後の平均額であり、世帯年収等により変動します。施設費・教材費等は別途必要です。</p>
+    <div class="result" id="costResult"></div>
+  </div>
 
-  <h2>補足</h2>
-  <p>この情報は2025年12月時点の公的資料および各校公式サイトをもとに作成しています。必ず最新の情報を各校のWebサイトでご確認ください。</p>
+  <script>
+    function calculateCost() {
+      const grade = parseInt(document.getElementById('grade').value);
+      const obtained = parseInt(document.getElementById('credits').value);
+      const needed = Math.max(74 - obtained, 0);
 
-  <p>ご不明な点や追加情報が必要な場合は、進路指導の先生までご相談ください。</p>
+      const publicComm = 500 + 0; // ほぼ0円
+      const privateComm = 30000 + needed * 5200;
+      const publicEvening = 2100 + 0;
+      const mitazono = 500 + needed * 820;
+
+      const formatter = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
+
+      const html = `
+        <h3>必要単位数: ${needed} 単位</h3>
+        <ul>
+          <li>公立通信制高校: ${formatter.format(publicComm)}（入学金＋授業料）</li>
+          <li>私立通信制高校: ${formatter.format(privateComm)}（入学金＋授業料、支援金適用後の例）</li>
+          <li>公立定時制高校: ${formatter.format(publicEvening)}（入学金＋授業料）</li>
+          <li>単位制高校（美田園）: ${formatter.format(mitazono)}（入学金＋授業料）</li>
+        </ul>
+      `;
+      document.getElementById('costResult').innerHTML = html;
+    }
+  </script>
+
 </body>
 </html>
