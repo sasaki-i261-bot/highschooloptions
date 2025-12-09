@@ -38,13 +38,13 @@
         padding: 0.5em;
       }
     }
-    .calculator {
+    .calculator, .quiz {
       background: #f9f9f9;
       padding: 1em;
       border: 1px solid #ccc;
       margin-top: 2em;
     }
-    .calculator label {
+    .calculator label, .quiz label {
       display: block;
       margin-top: 1em;
     }
@@ -58,116 +58,47 @@
 </head>
 <body>
   <h1>次の進路に向けて</h1>
-  <p>このページでは、宮城県内および全国に対応した、通信制・単位制・定時制高校についての特徴をまとめたものです。個人によって製作されたものであるため、あくまで参考程度に閲覧いただき、詳細についてはご自身でお調べいただくことを推奨いたします。</p>
 
-  <h2>通信制・単位制・定時制高校の違い</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>比較項目</th>
-        <th>通信制高校</th>
-        <th>単位制高校</th>
-        <th>定時制高校</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>学習環境</td>
-        <td>自宅中心<br>（オンライン・郵送）</td>
-        <td>学校中心<br>（時間割は自由）</td>
-        <td>学校<br>（昼・夜間の選択制）</td>
-      </tr>
-      <tr>
-        <td>卒業要件</td>
-        <td>レポート提出＋スクーリング＋試験</td>
-        <td>必要単位を修得</td>
-        <td>授業出席＋単位取得</td>
-      </tr>
-      <tr>
-        <td>登校について</td>
-        <td>年数回〜月1回など<br>柔軟</td>
-        <td>科目に応じて<br>週1〜5日</td>
-        <td>毎日<br>（夕方・夜間中心）</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h2>おすすめ高校リスト（ハイパーリンク付き）</h2>
-  <ul>
-    <li><a href="https://mitazono.myswan.ed.jp/" target="_blank">宮城県美田園高等学校（通信制課程）</a></li>
-    <li><a href="https://www.sendaiikuei.ed.jp/ilc/" target="_blank">仙台育英学園高等学校 ILC</a></li>
-    <li><a href="https://www.daiichigakuin.ed.jp/" target="_blank">第一学院高等学校</a></li>
-    <li><a href="https://www.clark.ed.jp/" target="_blank">クラーク記念国際高等学校</a></li>
-    <li><a href="https://www.nnn.ed.nico/" target="_blank">N高等学校・S高等学校（KADOKAWA）</a></li>
-    <li><a href="https://www.nhk-g.ac.jp/" target="_blank">NHK学園高等学校</a></li>
-    <li><a href="https://www.hchs.ed.jp/" target="_blank">ヒューマンキャンパス高等学校</a></li>
-  </ul>
-
-  <h2>進路変更にかかる費用の自動計算</h2>
-  <div class="calculator">
-    <label for="grade">現在の学年:</label>
-    <select id="grade">
-      <option value="1">高校1年生</option>
-      <option value="2">高校2年生</option>
-      <option value="3">高校3年生</option>
-    </select>
-
-    <label for="month">退学予定月（数字 1〜12）:</label>
-    <input type="number" id="month" min="1" max="12" value="12">
-
-    <label for="credits">取得済み単位数:</label>
-    <input type="number" id="credits" min="0" max="74" value="0">
-
-    <label for="supportLevel">就学支援金（月額・私立用）:<br>
-      <small>※年収目安：33,000円（非課税）／25,000円（年収350万円程度）／11,000円（年収590万円未満）</small>
-    </label>
-    <select id="supportLevel">
-      <option value="33000">33,000円（住民税非課税世帯）</option>
-      <option value="25000">25,000円（年収約350万円）</option>
-      <option value="11000" selected>11,000円（年収590万円未満）</option>
-      <option value="0">0円（対象外）</option>
-    </select>
-
-    <button onclick="calculateCost()">費用を計算する</button>
-
-    <div class="result" id="costResult">
-      <p>費用を計算するとこちらに結果が表示されます。</p>
-    </div>
+  <div class="quiz">
+    <h2>進路タイプ診断</h2>
+    <p>3つの質問に答えて、自分に合う高校タイプをチェックしてみましょう。</p>
+    <form id="quizForm">
+      <label>1. 朝起きるのが苦手ですか？<br>
+        <input type="radio" name="q1" value="yes"> はい
+        <input type="radio" name="q1" value="no"> いいえ
+      </label>
+      <label>2. 学校にはなるべく行かず、自分のペースで学びたいですか？<br>
+        <input type="radio" name="q2" value="yes"> はい
+        <input type="radio" name="q2" value="no"> いいえ
+      </label>
+      <label>3. 勉強以外にもやりたいこと（趣味・仕事・家の都合など）がありますか？<br>
+        <input type="radio" name="q3" value="yes"> はい
+        <input type="radio" name="q3" value="no"> いいえ
+      </label>
+      <button type="button" onclick="runDiagnosis()">診断する</button>
+    </form>
+    <div class="result" id="quizResult"></div>
   </div>
 
   <script>
-    function calculateCost() {
-      const grade = parseInt(document.getElementById('grade').value);
-      const obtained = parseInt(document.getElementById('credits').value);
-      const month = parseInt(document.getElementById('month').value);
-      const supportPerMonth = parseInt(document.getElementById('supportLevel').value);
-
-      const needed = Math.max(74 - obtained, 0);
-      const monthsUsed = (grade - 1) * 12 + month;
-      const remainingSupportMonths = Math.max(36 - monthsUsed, 0);
-      const privateSupport = remainingSupportMonths * supportPerMonth;
-
-      const publicComm = 500 + 0;
-      const privateCommGross = 30000 + needed * 5200;
-      const privateCommNet = Math.max(privateCommGross - privateSupport, 0);
-      const publicEvening = 2100 + 0;
-      const mitazonoGross = 500 + needed * 820;
-      const mitazonoSupport = remainingSupportMonths * 2722;
-      const mitazonoNet = Math.max(mitazonoGross - mitazonoSupport, 0);
-
-      const formatter = new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' });
-
-      const html = `
-        <h3>必要単位数: ${needed} 単位</h3>
-        <ul>
-          <li><strong>公立通信制高校:</strong> 卒業までにかかる費用 ${formatter.format(publicComm)}</li>
-          <li><strong>私立通信制高校:</strong> 卒業までにかかる費用 ${formatter.format(privateCommNet)}（支援金 ${formatter.format(privateSupport)} を控除後）</li>
-          <li><strong>公立定時制高校:</strong> 卒業までにかかる費用 ${formatter.format(publicEvening)}</li>
-          <li><strong>単位制高校（美田園）:</strong> 卒業までにかかる費用 ${formatter.format(mitazonoNet)}（支援金 ${formatter.format(mitazonoSupport)} を控除後）</li>
-        </ul>
-      `;
-      document.getElementById('costResult').innerHTML = html;
+    function runDiagnosis() {
+      const answers = ["q1", "q2", "q3"].map(q => document.querySelector(`input[name="${q}"]:checked`));
+      if (answers.includes(null)) {
+        document.getElementById('quizResult').innerHTML = '<p>すべての質問に回答してください。</p>';
+        return;
+      }
+      const score = answers.filter(a => a.value === "yes").length;
+      let result = '';
+      if (score === 3) {
+        result = 'あなたは「通信制高校」向きです。自分のペースで進められる環境が合っています。';
+      } else if (score === 2) {
+        result = 'あなたは「単位制高校」向きです。ある程度自由度のある通学スタイルが向いています。';
+      } else {
+        result = 'あなたは「定時制高校」向きです。毎日登校し、決まった時間に学ぶスタイルが合っています。';
+      }
+      document.getElementById('quizResult').innerHTML = `<p><strong>${result}</strong></p>`;
     }
   </script>
+
 </body>
 </html>
