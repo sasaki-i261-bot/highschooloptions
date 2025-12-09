@@ -100,5 +100,112 @@
     }
   </script>
 
+  <p>このページでは、宮城県内および全国に対応した、通信制・単位制・定時制高校についての特徴をまとめたものです。個人によって製作されたものであるため、あくまで参考程度に閲覧いただき、詳細についてはご自身でお調べいただくことを推奨いたします。</p>
+
+  <h2>通信制・単位制・定時制高校の違い</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>通信制</th>
+        <th>単位制</th>
+        <th>定時制</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>学習環境</td>
+        <td>自宅中心<br>（オンライン・郵送）</td>
+        <td>学校中心<br>（時間割は自由）</td>
+        <td>学校中心<br>（時間割に沿って通学）</td>
+      </tr>
+      <tr>
+        <td>卒業要件</td>
+        <td>74単位以上取得</td>
+        <td>74単位以上取得</td>
+        <td>74単位以上取得</td>
+      </tr>
+      <tr>
+        <td>登校について</td>
+        <td>年数回～月1程度</td>
+        <td>週数回～ほぼ毎日</td>
+        <td>週5日など、定時で通学</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>おすすめ学校リスト（宮城県）</h2>
+  <ul>
+    <li><a href="https://mitazono.myswan.ed.jp/" target="_blank">美田園高校（単位制）</a></li>
+    <li><a href="https://www.miyagi-c.ed.jp/miyasho/" target="_blank">宮城県立宮城広瀬高校（定時制）</a></li>
+    <li><a href="https://www.nhg.ed.jp/" target="_blank">NHK学園高校（通信制・全国）</a></li>
+    <li><a href="https://www.clark.ed.jp/" target="_blank">クラーク記念国際高校（私立通信制）</a></li>
+  </ul>
+
+  <div class="calculator">
+    <h2>卒業までにかかる費用の概算</h2>
+    <form id="costForm">
+      <label>今の学年:
+        <select id="grade">
+          <option value="1">高校1年生</option>
+          <option value="2">高校2年生</option>
+          <option value="3">高校3年生</option>
+        </select>
+      </label>
+      <label>退学予定月:
+        <input type="month" id="withdrawMonth">
+      </label>
+      <label>取得済み単位数:
+        <input type="number" id="credits" value="0">
+      </label>
+      <label>就学支援金（月額・私立用）※年収の目安付き:
+        <select id="supportLevel">
+          <option value="0">支援なし（年収約910万円以上）</option>
+          <option value="9900">月額 9,900円（年収約590～910万円）</option>
+          <option value="19800">月額 19,800円（年収約350～590万円）</option>
+          <option value="33000">月額 33,000円（年収約350万円未満・住民税非課税）</option>
+        </select>
+      </label>
+      <button type="button" onclick="calculateCosts()">計算する</button>
+    </form>
+    <div class="result" id="costResult"></div>
+  </div>
+
+  <script>
+    function calculateCosts() {
+      const grade = parseInt(document.getElementById("grade").value);
+      const credits = parseInt(document.getElementById("credits").value);
+      const supportLevel = parseInt(document.getElementById("supportLevel").value);
+      const withdrawDate = new Date(document.getElementById("withdrawMonth").value);
+      const withdrawMonth = withdrawDate.getMonth() + 1;
+
+      const publicComm = { tuition: 0, admission: 5000 };
+      const privateComm = { tuition: 250000, admission: 50000 };
+      const publicNight = { tuition: 30000, admission: 5650 };
+      const mitazono = { tuition: 120000, admission: 5650 };
+
+      const monthsUsed = Math.max(0, withdrawMonth);
+      const remainingMonths = 36 - monthsUsed;
+
+      const supportTotal = supportLevel * remainingMonths;
+
+      const calc = (school) => {
+        const cost = school.admission + school.tuition - (school === privateComm ? supportTotal : 0);
+        return Math.max(cost, 0).toLocaleString();
+      };
+
+      const result = `
+        <p><strong>卒業までにかかる費用（概算）:</strong></p>
+        <ul>
+          <li>公立通信制：${calc(publicComm)}円</li>
+          <li>私立通信制：${calc(privateComm)}円</li>
+          <li>公立定時制：${calc(publicNight)}円</li>
+          <li>美田園高校（単位制）：${calc(mitazono)}円</li>
+        </ul>
+      `;
+      document.getElementById("costResult").innerHTML = result;
+    }
+  </script>
+
 </body>
 </html>
