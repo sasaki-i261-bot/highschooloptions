@@ -160,3 +160,77 @@
       </tr>
     </tbody>
   </table>
+  <div class="calculator">
+  <h2>卒業までにかかる費用の自動計算</h2>
+  <label>現在の学年：
+    <select id="grade">
+      <option value="1">高校1年</option>
+      <option value="2">高校2年</option>
+      <option value="3">高校3年</option>
+    </select>
+  </label>
+  <label>退学予定の月：
+    <select id="month">
+      <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+      <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+      <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+      <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+    </select>
+  </label>
+  <label>取得単位数：
+    <input type="number" id="credits" min="0" max="74" value="0">
+  </label>
+  <label>世帯年収（私立通信制用）：
+    <select id="income">
+      <option value="0">~590万円未満（全額支給）</option>
+      <option value="1">590万円以上〜910万円未満（一部支給）</option>
+      <option value="2">910万円以上（対象外）</option>
+    </select>
+  </label>
+  <button onclick="calculateCosts()">計算する</button>
+  <div class="result" id="costResult"></div>
+</div>
+
+<script>
+  function calculateCosts() {
+    const grade = parseInt(document.getElementById('grade').value);
+    const month = parseInt(document.getElementById('month').value);
+    const credits = parseInt(document.getElementById('credits').value);
+    const incomeLevel = parseInt(document.getElementById('income').value);
+
+    const totalMonths = 36;
+    const monthsUsed = (grade - 1) * 12 + (month - 4 >= 0 ? month - 4 : month + 8);
+    const remainingMonths = Math.max(0, totalMonths - monthsUsed);
+    const remainingYears = Math.ceil((74 - credits) / 25);
+
+    // 学費データ（入学金, 授業料/年）
+    const costTable = {
+      publicComm: { entry: 500, tuition: 9600 }, // 公立通信
+      privateComm: { entry: 50000, tuition: 250000 }, // 私立通信
+      publicTeiji: { entry: 500, tuition: 36000 },
+      mitazono: { entry: 500, tuition: 36000 }
+    };
+
+    // 就学支援金（公立通信・定時制）
+    const supportPerYear = 118800;
+    // 私立は収入で支給金額が変動
+    const privateSupport = [250000, 125000, 0];
+
+    function calc(entry, tuition, support, label) {
+      const totalTuition = tuition * remainingYears;
+      const subsidy = support * remainingYears;
+      const finalCost = Math.max(0, entry + totalTuition - subsidy);
+      return `${label}：卒業までにかかる費用 約${finalCost.toLocaleString()}円`;
+    }
+
+    const resultText = [
+      calc(costTable.publicComm.entry, costTable.publicComm.tuition, supportPerYear, '公立通信制高校'),
+      calc(costTable.privateComm.entry, costTable.privateComm.tuition, privateSupport[incomeLevel], '私立通信制高校'),
+      calc(costTable.publicTeiji.entry, costTable.publicTeiji.tuition, supportPerYear, '公立定時制高校'),
+      calc(costTable.mitazono.entry, costTable.mitazono.tuition, supportPerYear, '宮城県立美田園高校（単位制）')
+    ];
+
+    document.getElementById('costResult').innerHTML = `<p><strong>${resultText.join('<br>')}</strong></p>`;
+  }
+</script>
+
