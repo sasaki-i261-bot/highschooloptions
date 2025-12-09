@@ -54,6 +54,9 @@
       border: 1px solid #aaa;
       margin-top: 1em;
     }
+    .result strong {
+      font-size: 1.1em;
+    }
   </style>
 </head>
 <body>
@@ -134,36 +137,83 @@
     </tbody>
   </table>
 
-  <h2>おすすめ学校リスト（宮城県）</h2>
-  <ul>
-    <li><a href="https://mitazono.myswan.ed.jp/" target="_blank">美田園高校（単位制）</a></li>
-    <li><a href="https://www.miyagi-c.ed.jp/miyasho/" target="_blank">宮城県立宮城広瀬高校（定時制）</a></li>
-    <li><a href="https://www.nhg.ed.jp/" target="_blank">NHK学園高校（通信制・全国）</a></li>
-    <li><a href="https://www.clark.ed.jp/" target="_blank">クラーク記念国際高校（私立通信制）</a></li>
-  </ul>
+  <h2>学校一覧（分類・地域別）</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>分類</th>
+        <th>地域</th>
+        <th>学校名</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>単位制</td>
+        <td>名取市</td>
+        <td><a href="https://mitazono.myswan.ed.jp/" target="_blank">美田園高校</a></td>
+      </tr>
+      <tr>
+        <td>定時制</td>
+        <td>仙台市</td>
+        <td>
+          <a href="https://sendai-th.myswan.ed.jp/" target="_blank">仙台工業高校</a><br>
+          <a href="https://sensho.myswan.ed.jp/" target="_blank">仙台大志高校</a><br>
+          <a href="https://dai2-th.myswan.ed.jp/" target="_blank">宮城県第二工業高校</a>
+        </td>
+      </tr>
+      <tr>
+        <td>定時制</td>
+        <td>県南・県北</td>
+        <td>
+          <a href="https://www.natori.myswan.ed.jp/" target="_blank">名取高校</a><br>
+          <a href="https://www.teizan.myswan.ed.jp/" target="_blank">貞山高校</a><br>
+          <a href="https://furukawa-th.myswan.ed.jp/" target="_blank">古川工業高校</a><br>
+          <a href="https://www.tajirisakura.myswan.ed.jp/" target="_blank">田尻さくら高校</a><br>
+          <a href="https://higamatsu.myswan.ed.jp/" target="_blank">東松島高校</a><br>
+          <a href="https://www.ishikitan.myswan.ed.jp/" target="_blank">石巻北高校</a><br>
+          <a href="https://www.kesennuma.myswan.ed.jp/" target="_blank">気仙沼高校</a><br>
+          <a href="https://ohshou.myswan.ed.jp/" target="_blank">大河原商業高校</a><br>
+          <a href="https://shiroishi.myswan.ed.jp/" target="_blank">白石高校七ヶ宿校</a><br>
+          <a href="https://sanuma.myswan.ed.jp/" target="_blank">佐沼高校</a>
+        </td>
+      </tr>
+      <tr>
+        <td>通信制</td>
+        <td>全国</td>
+        <td>
+          <a href="https://nnn.ed.jp/" target="_blank">N高等学校</a><br>
+          <a href="https://www.r-ac.jp/" target="_blank">R高等学校</a><br>
+          <a href="https://www.s-highschool.net/" target="_blank">S高等学校</a><br>
+          <a href="https://www.daiichigakuin.ed.jp/" target="_blank">第一学院高等学校</a><br>
+          <a href="https://www.asuka-mirai.ed.jp/" target="_blank">飛鳥未来高等学校</a><br>
+          <a href="https://www.ozora-net.com/" target="_blank">おおぞら高等学院</a><br>
+          <em>*全国にありますので、これ限りではありません。</em>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
+  <h2>卒業までにかかる費用計算</h2>
   <div class="calculator">
-    <h2>卒業までにかかる費用の概算</h2>
     <form id="costForm">
-      <label>今の学年:
+      <label>現在の学年：
         <select id="grade">
-          <option value="1">高校1年生</option>
-          <option value="2">高校2年生</option>
-          <option value="3">高校3年生</option>
+          <option value="1">高校1年</option>
+          <option value="2">高校2年</option>
+          <option value="3">高校3年</option>
         </select>
       </label>
-      <label>退学予定月:
-        <input type="month" id="withdrawMonth">
+      <label>退学予定月（数字のみ）：
+        <input type="number" id="dropMonth" min="1" max="12" value="12">
       </label>
-      <label>取得済み単位数:
-        <input type="number" id="credits" value="0">
+      <label>取得単位数：
+        <input type="number" id="units" value="0">
       </label>
-      <label>就学支援金（月額・私立用）※年収の目安付き:
-        <select id="supportLevel">
-          <option value="0">支援なし（年収約910万円以上）</option>
-          <option value="9900">月額 9,900円（年収約590～910万円）</option>
-          <option value="19800">月額 19,800円（年収約350～590万円）</option>
-          <option value="33000">月額 33,000円（年収約350万円未満・住民税非課税）</option>
+      <label>世帯収入区分（私立通信向け）：
+        <select id="incomeLevel">
+          <option value="1">年収590万円未満（全額支給）</option>
+          <option value="2">年収590～910万円未満（一部支給）</option>
+          <option value="3">年収910万円以上（対象外）</option>
         </select>
       </label>
       <button type="button" onclick="calculateCosts()">計算する</button>
@@ -174,38 +224,41 @@
   <script>
     function calculateCosts() {
       const grade = parseInt(document.getElementById("grade").value);
-      const credits = parseInt(document.getElementById("credits").value);
-      const supportLevel = parseInt(document.getElementById("supportLevel").value);
-      const withdrawDate = new Date(document.getElementById("withdrawMonth").value);
-      const withdrawMonth = withdrawDate.getMonth() + 1;
+      const dropMonth = parseInt(document.getElementById("dropMonth").value);
+      const units = parseInt(document.getElementById("units").value);
+      const incomeLevel = parseInt(document.getElementById("incomeLevel").value);
 
-      const publicComm = { tuition: 0, admission: 5000 };
-      const privateComm = { tuition: 250000, admission: 50000 };
-      const publicNight = { tuition: 30000, admission: 5650 };
-      const mitazono = { tuition: 120000, admission: 5650 };
+      const maxMonths = 36;
+      const remainingMonths = maxMonths - ((grade - 1) * 12 + dropMonth);
 
-      const monthsUsed = Math.max(0, withdrawMonth);
-      const remainingMonths = 36 - monthsUsed;
-
-      const supportTotal = supportLevel * remainingMonths;
-
-      const calc = (school) => {
-        const cost = school.admission + school.tuition - (school === privateComm ? supportTotal : 0);
-        return Math.max(cost, 0).toLocaleString();
+      const costData = {
+        公立通信: { 入学金: 500, 授業料単価: 336, 単位数: 74 },
+        私立通信: { 入学金: 10000, 授業料単価: 12000, 単位数: 74 },
+        公立定時: { 入学金: 500, 授業料単価: 336, 単位数: 74 },
+        単位制: { 入学金: 0, 授業料単価: 0, 単位数: 74 }
       };
 
-      const result = `
-        <p><strong>卒業までにかかる費用（概算）:</strong></p>
-        <ul>
-          <li>公立通信制：${calc(publicComm)}円</li>
-          <li>私立通信制：${calc(privateComm)}円</li>
-          <li>公立定時制：${calc(publicNight)}円</li>
-          <li>美田園高校（単位制）：${calc(mitazono)}円</li>
-        </ul>
-      `;
-      document.getElementById("costResult").innerHTML = result;
+      const subsidy = (units, incomeLevel) => {
+        if (incomeLevel === 1) return 9900 * units;
+        if (incomeLevel === 2) return 4950 * units;
+        return 0;
+      };
+
+      let resultHTML = "<h3>卒業までにかかる費用</h3><ul>";
+
+      for (const school in costData) {
+        const 入学金 = costData[school].入学金;
+        const 授業料単価 = costData[school].授業料単価;
+        const 単位必要 = costData[school].単位数;
+        const 総授業料 = 授業料単価 * 単位必要;
+        const 支援金 = school === "私立通信" ? subsidy(単位必要, incomeLevel) : 0;
+        const 合計 = 入学金 + 総授業料 - 支援金;
+        resultHTML += `<li>${school}：${合計.toLocaleString()}円（入学金${入学金}円＋授業料${総授業料.toLocaleString()}円－支援金${支援金.toLocaleString()}円）</li>`;
+      }
+
+      resultHTML += "</ul>";
+      document.getElementById("costResult").innerHTML = resultHTML;
     }
   </script>
-
 </body>
 </html>
